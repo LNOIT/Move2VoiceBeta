@@ -56,7 +56,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.rtbGames = new System.Windows.Forms.RichTextBox();
             this.rtbTells = new System.Windows.Forms.RichTextBox();
-            this.pnlEngine = new System.Windows.Forms.Panel();
+            this.pnlDebug = new System.Windows.Forms.Panel();
             this.btnParseEngineLine = new System.Windows.Forms.Button();
             this.tbDebug = new System.Windows.Forms.TextBox();
             this.btnDebugPieces = new System.Windows.Forms.Button();
@@ -87,11 +87,19 @@
             this.button3 = new System.Windows.Forms.Button();
             this.lblWhitesRemainingTimeFormated = new System.Windows.Forms.Label();
             this.lblBlacksRemainingTimeFormated = new System.Windows.Forms.Label();
+            this.pnlTellsAndMoves = new System.Windows.Forms.Panel();
+            this.pnlGameControl = new System.Windows.Forms.Panel();
+            this.pnlGameInfo = new System.Windows.Forms.Panel();
+            this.btnShowDebugPanel = new System.Windows.Forms.Button();
+            this.btnTellsAndMoves = new System.Windows.Forms.Button();
             this.pnlBoard.SuspendLayout();
             this.pnlGameControls.SuspendLayout();
             this.pnlServer.SuspendLayout();
-            this.pnlEngine.SuspendLayout();
+            this.pnlDebug.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeachrate)).BeginInit();
+            this.pnlTellsAndMoves.SuspendLayout();
+            this.pnlGameControl.SuspendLayout();
+            this.pnlGameInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlBoard
@@ -100,9 +108,7 @@
             this.pnlBoard.AccessibleName = "The board";
             this.pnlBoard.AccessibleRole = System.Windows.Forms.AccessibleRole.Graphic;
             this.pnlBoard.BackColor = System.Drawing.Color.DarkRed;
-            this.pnlBoard.Controls.Add(this.lblsideToMove);
-            this.pnlBoard.Controls.Add(this.lblLastMove);
-            this.pnlBoard.Controls.Add(this.lblAmIPlaying);
+            this.pnlBoard.Controls.Add(this.richTextBox1);
             this.pnlBoard.Location = new System.Drawing.Point(12, 12);
             this.pnlBoard.Name = "pnlBoard";
             this.pnlBoard.Size = new System.Drawing.Size(500, 500);
@@ -114,7 +120,7 @@
             // lblsideToMove
             // 
             this.lblsideToMove.AutoSize = true;
-            this.lblsideToMove.Location = new System.Drawing.Point(7, 484);
+            this.lblsideToMove.Location = new System.Drawing.Point(145, 196);
             this.lblsideToMove.Name = "lblsideToMove";
             this.lblsideToMove.Size = new System.Drawing.Size(76, 13);
             this.lblsideToMove.TabIndex = 6;
@@ -123,7 +129,7 @@
             // lblLastMove
             // 
             this.lblLastMove.AutoSize = true;
-            this.lblLastMove.Location = new System.Drawing.Point(85, 484);
+            this.lblLastMove.Location = new System.Drawing.Point(225, 196);
             this.lblLastMove.Name = "lblLastMove";
             this.lblLastMove.Size = new System.Drawing.Size(57, 13);
             this.lblLastMove.TabIndex = 17;
@@ -132,7 +138,7 @@
             // lblAmIPlaying
             // 
             this.lblAmIPlaying.AutoSize = true;
-            this.lblAmIPlaying.Location = new System.Drawing.Point(148, 484);
+            this.lblAmIPlaying.Location = new System.Drawing.Point(365, 196);
             this.lblAmIPlaying.Name = "lblAmIPlaying";
             this.lblAmIPlaying.Size = new System.Drawing.Size(69, 13);
             this.lblAmIPlaying.TabIndex = 9;
@@ -141,9 +147,9 @@
             // tbGameString
             // 
             this.tbGameString.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbGameString.Location = new System.Drawing.Point(14, 527);
+            this.tbGameString.Location = new System.Drawing.Point(12, 530);
             this.tbGameString.Name = "tbGameString";
-            this.tbGameString.Size = new System.Drawing.Size(281, 23);
+            this.tbGameString.Size = new System.Drawing.Size(663, 23);
             this.tbGameString.TabIndex = 1;
             this.tbGameString.TabStop = false;
             this.tbGameString.Text = "4k2r/6r1/8/8/8/8/3R4/R3K3 w Qk - 0 1";
@@ -156,17 +162,17 @@
             this.pnlGameControls.Controls.Add(this.btnStart);
             this.pnlGameControls.Controls.Add(this.btnForward);
             this.pnlGameControls.Controls.Add(this.btnBack);
-            this.pnlGameControls.Location = new System.Drawing.Point(23, 54);
+            this.pnlGameControls.Location = new System.Drawing.Point(17, 13);
             this.pnlGameControls.Name = "pnlGameControls";
-            this.pnlGameControls.Size = new System.Drawing.Size(431, 37);
+            this.pnlGameControls.Size = new System.Drawing.Size(480, 69);
             this.pnlGameControls.TabIndex = 1;
             // 
             // button2
             // 
             this.button2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button2.Location = new System.Drawing.Point(362, 3);
+            this.button2.Location = new System.Drawing.Point(3, 32);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(30, 23);
+            this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 13;
             this.button2.TabStop = false;
             this.button2.Text = "CreatePgn";
@@ -176,9 +182,9 @@
             // btnMoves
             // 
             this.btnMoves.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnMoves.Location = new System.Drawing.Point(395, 3);
+            this.btnMoves.Location = new System.Drawing.Point(93, 32);
             this.btnMoves.Name = "btnMoves";
-            this.btnMoves.Size = new System.Drawing.Size(33, 23);
+            this.btnMoves.Size = new System.Drawing.Size(75, 23);
             this.btnMoves.TabIndex = 12;
             this.btnMoves.TabStop = false;
             this.btnMoves.Text = "Moves";
@@ -235,6 +241,8 @@
             // 
             // pnlServer
             // 
+            this.pnlServer.Controls.Add(this.btnShowDebugPanel);
+            this.pnlServer.Controls.Add(this.pnlTellsAndMoves);
             this.pnlServer.Controls.Add(this.lblLastBuildDate);
             this.pnlServer.Controls.Add(this.dateTimePicker1);
             this.pnlServer.Controls.Add(this.tbLastResponse);
@@ -245,11 +253,10 @@
             this.pnlServer.Controls.Add(this.btnSend);
             this.pnlServer.Controls.Add(this.btnConnect);
             this.pnlServer.Controls.Add(this.tbGameString);
-            this.pnlServer.Controls.Add(this.pnlGameControls);
             this.pnlServer.Controls.Add(this.rtbMainConsole);
-            this.pnlServer.Location = new System.Drawing.Point(755, 12);
+            this.pnlServer.Location = new System.Drawing.Point(518, 6);
             this.pnlServer.Name = "pnlServer";
-            this.pnlServer.Size = new System.Drawing.Size(689, 550);
+            this.pnlServer.Size = new System.Drawing.Size(926, 565);
             this.pnlServer.TabIndex = 2;
             // 
             // lblLastBuildDate
@@ -279,7 +286,7 @@
             this.tbLastResponse.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbLastResponse.Location = new System.Drawing.Point(14, 501);
             this.tbLastResponse.Name = "tbLastResponse";
-            this.tbLastResponse.Size = new System.Drawing.Size(242, 23);
+            this.tbLastResponse.Size = new System.Drawing.Size(661, 23);
             this.tbLastResponse.TabIndex = 17;
             this.tbLastResponse.TabStop = false;
             this.tbLastResponse.TextChanged += new System.EventHandler(this.tbLastResponse_TextChanged);
@@ -337,7 +344,7 @@
             // btnSend
             // 
             this.btnSend.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnSend.Location = new System.Drawing.Point(241, 474);
+            this.btnSend.Location = new System.Drawing.Point(600, 474);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
             this.btnSend.TabIndex = 12;
@@ -380,9 +387,9 @@
             // button1
             // 
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(9, 183);
+            this.button1.Location = new System.Drawing.Point(10, 162);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 23);
+            this.button1.Size = new System.Drawing.Size(126, 23);
             this.button1.TabIndex = 18;
             this.button1.TabStop = false;
             this.button1.Text = "Convert to FEN";
@@ -395,7 +402,7 @@
             this.rtbGames.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rtbGames.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbGames.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.rtbGames.Location = new System.Drawing.Point(518, 469);
+            this.rtbGames.Location = new System.Drawing.Point(251, 190);
             this.rtbGames.Name = "rtbGames";
             this.rtbGames.Size = new System.Drawing.Size(231, 121);
             this.rtbGames.TabIndex = 3;
@@ -408,7 +415,7 @@
             this.rtbTells.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.rtbTells.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbTells.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.rtbTells.Location = new System.Drawing.Point(518, 342);
+            this.rtbTells.Location = new System.Drawing.Point(14, 190);
             this.rtbTells.Name = "rtbTells";
             this.rtbTells.Size = new System.Drawing.Size(231, 121);
             this.rtbTells.TabIndex = 4;
@@ -416,25 +423,33 @@
             this.rtbTells.Text = "";
             this.rtbTells.TextChanged += new System.EventHandler(this.rtbTells_TextChanged);
             // 
-            // pnlEngine
+            // pnlDebug
             // 
-            this.pnlEngine.Controls.Add(this.btnParseEngineLine);
-            this.pnlEngine.Controls.Add(this.tbDebug);
-            this.pnlEngine.Controls.Add(this.btnDebugPieces);
-            this.pnlEngine.Controls.Add(this.rtbLog);
-            this.pnlEngine.Controls.Add(this.richTextBox2);
-            this.pnlEngine.Controls.Add(this.button1);
-            this.pnlEngine.Controls.Add(this.btnMovesDebug);
-            this.pnlEngine.Controls.Add(this.nudSpeachrate);
-            this.pnlEngine.Location = new System.Drawing.Point(828, 568);
-            this.pnlEngine.Name = "pnlEngine";
-            this.pnlEngine.Size = new System.Drawing.Size(452, 209);
-            this.pnlEngine.TabIndex = 3;
+            this.pnlDebug.Controls.Add(this.btnTellsAndMoves);
+            this.pnlDebug.Controls.Add(this.lblAmIPlaying);
+            this.pnlDebug.Controls.Add(this.lblLastMove);
+            this.pnlDebug.Controls.Add(this.lblsideToMove);
+            this.pnlDebug.Controls.Add(this.btnParseEngineLine);
+            this.pnlDebug.Controls.Add(this.tbDebug);
+            this.pnlDebug.Controls.Add(this.button3);
+            this.pnlDebug.Controls.Add(this.label2);
+            this.pnlDebug.Controls.Add(this.btnDebugPieces);
+            this.pnlDebug.Controls.Add(this.rtbLog);
+            this.pnlDebug.Controls.Add(this.richTextBox2);
+            this.pnlDebug.Controls.Add(this.button1);
+            this.pnlDebug.Controls.Add(this.btnMovesDebug);
+            this.pnlDebug.Controls.Add(this.nudSpeachrate);
+            this.pnlDebug.Controls.Add(this.label1);
+            this.pnlDebug.Location = new System.Drawing.Point(996, 568);
+            this.pnlDebug.Name = "pnlDebug";
+            this.pnlDebug.Size = new System.Drawing.Size(452, 256);
+            this.pnlDebug.TabIndex = 3;
+            this.pnlDebug.Visible = false;
             // 
             // btnParseEngineLine
             // 
             this.btnParseEngineLine.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnParseEngineLine.Location = new System.Drawing.Point(9, 151);
+            this.btnParseEngineLine.Location = new System.Drawing.Point(9, 130);
             this.btnParseEngineLine.Name = "btnParseEngineLine";
             this.btnParseEngineLine.Size = new System.Drawing.Size(128, 26);
             this.btnParseEngineLine.TabIndex = 25;
@@ -446,7 +461,7 @@
             // tbDebug
             // 
             this.tbDebug.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbDebug.Location = new System.Drawing.Point(9, 128);
+            this.tbDebug.Location = new System.Drawing.Point(10, 101);
             this.tbDebug.Name = "tbDebug";
             this.tbDebug.Size = new System.Drawing.Size(127, 23);
             this.tbDebug.TabIndex = 24;
@@ -455,7 +470,7 @@
             // btnDebugPieces
             // 
             this.btnDebugPieces.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnDebugPieces.Location = new System.Drawing.Point(9, 96);
+            this.btnDebugPieces.Location = new System.Drawing.Point(9, 69);
             this.btnDebugPieces.Name = "btnDebugPieces";
             this.btnDebugPieces.Size = new System.Drawing.Size(128, 26);
             this.btnDebugPieces.TabIndex = 23;
@@ -469,7 +484,7 @@
             this.rtbLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbLog.Location = new System.Drawing.Point(295, 9);
             this.rtbLog.Name = "rtbLog";
-            this.rtbLog.Size = new System.Drawing.Size(139, 197);
+            this.rtbLog.Size = new System.Drawing.Size(139, 176);
             this.rtbLog.TabIndex = 22;
             this.rtbLog.TabStop = false;
             this.rtbLog.Text = "";
@@ -480,7 +495,7 @@
             this.richTextBox2.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox2.Location = new System.Drawing.Point(143, 9);
             this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(139, 197);
+            this.richTextBox2.Size = new System.Drawing.Size(139, 176);
             this.richTextBox2.TabIndex = 21;
             this.richTextBox2.TabStop = false;
             this.richTextBox2.Text = "rnbqkbnr\npppppppp\n--------\n--------\n--------\n--------\nPPPPPPPP\nRNBQKBNR";
@@ -488,7 +503,7 @@
             // btnMovesDebug
             // 
             this.btnMovesDebug.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnMovesDebug.Location = new System.Drawing.Point(9, 64);
+            this.btnMovesDebug.Location = new System.Drawing.Point(8, 37);
             this.btnMovesDebug.Name = "btnMovesDebug";
             this.btnMovesDebug.Size = new System.Drawing.Size(128, 26);
             this.btnMovesDebug.TabIndex = 18;
@@ -501,8 +516,8 @@
             // 
             this.nudSpeachrate.AccessibleName = "Speechrate";
             this.nudSpeachrate.AccessibleRole = System.Windows.Forms.AccessibleRole.SpinButton;
-            this.nudSpeachrate.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudSpeachrate.Location = new System.Drawing.Point(17, 9);
+            this.nudSpeachrate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nudSpeachrate.Location = new System.Drawing.Point(9, 9);
             this.nudSpeachrate.Maximum = new decimal(new int[] {
             10,
             0,
@@ -514,7 +529,7 @@
             0,
             -2147483648});
             this.nudSpeachrate.Name = "nudSpeachrate";
-            this.nudSpeachrate.Size = new System.Drawing.Size(120, 49);
+            this.nudSpeachrate.Size = new System.Drawing.Size(120, 22);
             this.nudSpeachrate.TabIndex = 7;
             this.nudSpeachrate.TabStop = false;
             this.nudSpeachrate.Value = new decimal(new int[] {
@@ -550,7 +565,7 @@
             // btnStartEngine
             // 
             this.btnStartEngine.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnStartEngine.Location = new System.Drawing.Point(19, 598);
+            this.btnStartEngine.Location = new System.Drawing.Point(546, 591);
             this.btnStartEngine.Name = "btnStartEngine";
             this.btnStartEngine.Size = new System.Drawing.Size(75, 23);
             this.btnStartEngine.TabIndex = 8;
@@ -562,7 +577,7 @@
             // btnStopEngine
             // 
             this.btnStopEngine.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnStopEngine.Location = new System.Drawing.Point(100, 598);
+            this.btnStopEngine.Location = new System.Drawing.Point(626, 591);
             this.btnStopEngine.Name = "btnStopEngine";
             this.btnStopEngine.Size = new System.Drawing.Size(75, 23);
             this.btnStopEngine.TabIndex = 1;
@@ -574,7 +589,7 @@
             // btnReadLine
             // 
             this.btnReadLine.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.btnReadLine.Location = new System.Drawing.Point(181, 598);
+            this.btnReadLine.Location = new System.Drawing.Point(710, 591);
             this.btnReadLine.Name = "btnReadLine";
             this.btnReadLine.Size = new System.Drawing.Size(75, 23);
             this.btnReadLine.TabIndex = 10;
@@ -586,7 +601,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(20, 814);
+            this.label1.Location = new System.Drawing.Point(292, 196);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 12;
@@ -602,14 +617,14 @@
             this.rtbEngineOutPut.BackColor = System.Drawing.Color.MidnightBlue;
             this.rtbEngineOutPut.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbEngineOutPut.ForeColor = System.Drawing.SystemColors.Info;
-            this.rtbEngineOutPut.Location = new System.Drawing.Point(12, 627);
+            this.rtbEngineOutPut.Location = new System.Drawing.Point(530, 577);
             this.rtbEngineOutPut.Name = "rtbEngineOutPut";
-            this.rtbEngineOutPut.Size = new System.Drawing.Size(773, 184);
+            this.rtbEngineOutPut.Size = new System.Drawing.Size(460, 247);
             this.rtbEngineOutPut.TabIndex = 4;
             this.rtbEngineOutPut.TabStop = false;
             this.rtbEngineOutPut.Text = resources.GetString("rtbEngineOutPut.Text");
             this.rtbEngineOutPut.WordWrap = false;
-            this.rtbEngineOutPut.TextChanged += new System.EventHandler(this.rtbEngineOutPut_TextChanged);
+           // this.rtbEngineOutPut.TextChanged += new System.EventHandler(this.rtbEngineOutPut_TextChanged);
             // 
             // tmrEngine
             // 
@@ -620,7 +635,7 @@
             this.rtbPgn.BackColor = System.Drawing.Color.DarkGreen;
             this.rtbPgn.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbPgn.ForeColor = System.Drawing.Color.White;
-            this.rtbPgn.Location = new System.Drawing.Point(518, 179);
+            this.rtbPgn.Location = new System.Drawing.Point(251, 12);
             this.rtbPgn.Name = "rtbPgn";
             this.rtbPgn.Size = new System.Drawing.Size(231, 157);
             this.rtbPgn.TabIndex = 6;
@@ -655,7 +670,7 @@
             this.rtbMovesListRaw.BackColor = System.Drawing.Color.Indigo;
             this.rtbMovesListRaw.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbMovesListRaw.ForeColor = System.Drawing.SystemColors.Info;
-            this.rtbMovesListRaw.Location = new System.Drawing.Point(518, 15);
+            this.rtbMovesListRaw.Location = new System.Drawing.Point(14, 12);
             this.rtbMovesListRaw.Name = "rtbMovesListRaw";
             this.rtbMovesListRaw.Size = new System.Drawing.Size(231, 158);
             this.rtbMovesListRaw.TabIndex = 5;
@@ -671,7 +686,7 @@
             // lblWhitePlayer
             // 
             this.lblWhitePlayer.AutoSize = true;
-            this.lblWhitePlayer.Location = new System.Drawing.Point(160, 517);
+            this.lblWhitePlayer.Location = new System.Drawing.Point(15, 107);
             this.lblWhitePlayer.Name = "lblWhitePlayer";
             this.lblWhitePlayer.Size = new System.Drawing.Size(74, 13);
             this.lblWhitePlayer.TabIndex = 7;
@@ -680,7 +695,7 @@
             // lblBlackPlayer
             // 
             this.lblBlackPlayer.AutoSize = true;
-            this.lblBlackPlayer.Location = new System.Drawing.Point(314, 523);
+            this.lblBlackPlayer.Location = new System.Drawing.Point(199, 107);
             this.lblBlackPlayer.Name = "lblBlackPlayer";
             this.lblBlackPlayer.Size = new System.Drawing.Size(34, 13);
             this.lblBlackPlayer.TabIndex = 8;
@@ -692,7 +707,7 @@
             this.lblWhitesRemainingTime.BackColor = System.Drawing.Color.White;
             this.lblWhitesRemainingTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWhitesRemainingTime.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblWhitesRemainingTime.Location = new System.Drawing.Point(15, 515);
+            this.lblWhitesRemainingTime.Location = new System.Drawing.Point(14, 9);
             this.lblWhitesRemainingTime.Name = "lblWhitesRemainingTime";
             this.lblWhitesRemainingTime.Size = new System.Drawing.Size(40, 24);
             this.lblWhitesRemainingTime.TabIndex = 10;
@@ -704,7 +719,7 @@
             this.lblBlacksRemainingTime.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblBlacksRemainingTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlacksRemainingTime.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblBlacksRemainingTime.Location = new System.Drawing.Point(394, 517);
+            this.lblBlacksRemainingTime.Location = new System.Drawing.Point(198, 9);
             this.lblBlacksRemainingTime.Name = "lblBlacksRemainingTime";
             this.lblBlacksRemainingTime.Size = new System.Drawing.Size(40, 24);
             this.lblBlacksRemainingTime.TabIndex = 11;
@@ -712,9 +727,9 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(563, 24);
+            this.richTextBox1.Location = new System.Drawing.Point(3, 6);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(284, 597);
+            this.richTextBox1.Size = new System.Drawing.Size(174, 322);
             this.richTextBox1.TabIndex = 13;
             this.richTextBox1.Text = "";
             this.richTextBox1.Visible = false;
@@ -728,7 +743,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(825, 804);
+            this.label2.Location = new System.Drawing.Point(186, 230);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 13);
             this.label2.TabIndex = 21;
@@ -738,7 +753,7 @@
             // 
             this.button3.BackColor = System.Drawing.Color.Red;
             this.button3.ForeColor = System.Drawing.Color.Yellow;
-            this.button3.Location = new System.Drawing.Point(1116, 794);
+            this.button3.Location = new System.Drawing.Point(314, 220);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(120, 23);
             this.button3.TabIndex = 22;
@@ -753,7 +768,7 @@
             this.lblWhitesRemainingTimeFormated.BackColor = System.Drawing.Color.White;
             this.lblWhitesRemainingTimeFormated.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWhitesRemainingTimeFormated.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.lblWhitesRemainingTimeFormated.Location = new System.Drawing.Point(15, 555);
+            this.lblWhitesRemainingTimeFormated.Location = new System.Drawing.Point(14, 58);
             this.lblWhitesRemainingTimeFormated.Name = "lblWhitesRemainingTimeFormated";
             this.lblWhitesRemainingTimeFormated.Size = new System.Drawing.Size(40, 24);
             this.lblWhitesRemainingTimeFormated.TabIndex = 23;
@@ -765,11 +780,76 @@
             this.lblBlacksRemainingTimeFormated.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.lblBlacksRemainingTimeFormated.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblBlacksRemainingTimeFormated.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblBlacksRemainingTimeFormated.Location = new System.Drawing.Point(394, 555);
+            this.lblBlacksRemainingTimeFormated.Location = new System.Drawing.Point(198, 58);
             this.lblBlacksRemainingTimeFormated.Name = "lblBlacksRemainingTimeFormated";
             this.lblBlacksRemainingTimeFormated.Size = new System.Drawing.Size(40, 24);
             this.lblBlacksRemainingTimeFormated.TabIndex = 24;
             this.lblBlacksRemainingTimeFormated.Text = "900";
+            // 
+            // pnlTellsAndMoves
+            // 
+            this.pnlTellsAndMoves.Controls.Add(this.rtbMovesListRaw);
+            this.pnlTellsAndMoves.Controls.Add(this.rtbPgn);
+            this.pnlTellsAndMoves.Controls.Add(this.rtbTells);
+            this.pnlTellsAndMoves.Controls.Add(this.rtbGames);
+            this.pnlTellsAndMoves.Location = new System.Drawing.Point(14, 41);
+            this.pnlTellsAndMoves.Name = "pnlTellsAndMoves";
+            this.pnlTellsAndMoves.Size = new System.Drawing.Size(496, 341);
+            this.pnlTellsAndMoves.TabIndex = 20;
+            this.pnlTellsAndMoves.Visible = false;
+            // 
+            // pnlGameControl
+            // 
+            this.pnlGameControl.AccessibleDescription = "";
+            this.pnlGameControl.AccessibleName = "The board";
+            this.pnlGameControl.AccessibleRole = System.Windows.Forms.AccessibleRole.Graphic;
+            this.pnlGameControl.BackColor = System.Drawing.Color.DarkRed;
+            this.pnlGameControl.Controls.Add(this.pnlGameInfo);
+            this.pnlGameControl.Controls.Add(this.pnlGameControls);
+            this.pnlGameControl.Location = new System.Drawing.Point(12, 532);
+            this.pnlGameControl.Name = "pnlGameControl";
+            this.pnlGameControl.Size = new System.Drawing.Size(500, 292);
+            this.pnlGameControl.TabIndex = 25;
+            this.pnlGameControl.TabStop = true;
+            this.pnlGameControl.Tag = "The chessboard";
+            // 
+            // pnlGameInfo
+            // 
+            this.pnlGameInfo.BackColor = System.Drawing.Color.DarkOliveGreen;
+            this.pnlGameInfo.Controls.Add(this.lblWhitesRemainingTime);
+            this.pnlGameInfo.Controls.Add(this.lblBlacksRemainingTimeFormated);
+            this.pnlGameInfo.Controls.Add(this.lblWhitesRemainingTimeFormated);
+            this.pnlGameInfo.Controls.Add(this.lblWhitePlayer);
+            this.pnlGameInfo.Controls.Add(this.lblBlacksRemainingTime);
+            this.pnlGameInfo.Controls.Add(this.lblBlackPlayer);
+            this.pnlGameInfo.Location = new System.Drawing.Point(17, 88);
+            this.pnlGameInfo.Name = "pnlGameInfo";
+            this.pnlGameInfo.Size = new System.Drawing.Size(467, 157);
+            this.pnlGameInfo.TabIndex = 26;
+            // 
+            // btnShowDebugPanel
+            // 
+            this.btnShowDebugPanel.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnShowDebugPanel.Location = new System.Drawing.Point(837, 526);
+            this.btnShowDebugPanel.Name = "btnShowDebugPanel";
+            this.btnShowDebugPanel.Size = new System.Drawing.Size(75, 23);
+            this.btnShowDebugPanel.TabIndex = 26;
+            this.btnShowDebugPanel.TabStop = false;
+            this.btnShowDebugPanel.Text = "Debug Panel";
+            this.btnShowDebugPanel.UseVisualStyleBackColor = true;
+            this.btnShowDebugPanel.Click += new System.EventHandler(this.btnShowDebugPanel_Click);
+            // 
+            // btnTellsAndMoves
+            // 
+            this.btnTellsAndMoves.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnTellsAndMoves.Location = new System.Drawing.Point(10, 191);
+            this.btnTellsAndMoves.Name = "btnTellsAndMoves";
+            this.btnTellsAndMoves.Size = new System.Drawing.Size(126, 23);
+            this.btnTellsAndMoves.TabIndex = 26;
+            this.btnTellsAndMoves.TabStop = false;
+            this.btnTellsAndMoves.Text = "Tells Panel";
+            this.btnTellsAndMoves.UseVisualStyleBackColor = true;
+            this.btnTellsAndMoves.Click += new System.EventHandler(this.btnTellsAndMoves_Click);
             // 
             // FrmMain
             // 
@@ -777,29 +857,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1456, 836);
-            this.Controls.Add(this.lblBlacksRemainingTimeFormated);
-            this.Controls.Add(this.lblWhitesRemainingTimeFormated);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.pnlGameControl);
             this.Controls.Add(this.pnlServer);
-            this.Controls.Add(this.rtbMovesListRaw);
             this.Controls.Add(this.btnGamesConsole);
             this.Controls.Add(this.btnTellsConsole);
-            this.Controls.Add(this.rtbPgn);
-            this.Controls.Add(this.rtbTells);
-            this.Controls.Add(this.rtbGames);
-            this.Controls.Add(this.rtbEngineOutPut);
-            this.Controls.Add(this.lblBlacksRemainingTime);
             this.Controls.Add(this.btnStartEngine);
             this.Controls.Add(this.btnStopEngine);
-            this.Controls.Add(this.lblWhitesRemainingTime);
-            this.Controls.Add(this.lblBlackPlayer);
             this.Controls.Add(this.btnReadLine);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.lblWhitePlayer);
-            this.Controls.Add(this.pnlEngine);
+            this.Controls.Add(this.pnlDebug);
             this.Controls.Add(this.pnlBoard);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.rtbEngineOutPut);
             this.ForeColor = System.Drawing.SystemColors.Control;
             this.Name = "FrmMain";
             this.Text = "Move to voice";
@@ -807,16 +874,19 @@
             this.Shown += new System.EventHandler(this.FrmMain_Shown);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FrmMain_KeyDown);
             this.MouseEnter += new System.EventHandler(this.FrmMain_MouseEnter);
+            this.Resize += new System.EventHandler(this.FrmMain_Resize);
             this.pnlBoard.ResumeLayout(false);
-            this.pnlBoard.PerformLayout();
             this.pnlGameControls.ResumeLayout(false);
             this.pnlServer.ResumeLayout(false);
             this.pnlServer.PerformLayout();
-            this.pnlEngine.ResumeLayout(false);
-            this.pnlEngine.PerformLayout();
+            this.pnlDebug.ResumeLayout(false);
+            this.pnlDebug.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeachrate)).EndInit();
+            this.pnlTellsAndMoves.ResumeLayout(false);
+            this.pnlGameControl.ResumeLayout(false);
+            this.pnlGameInfo.ResumeLayout(false);
+            this.pnlGameInfo.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -827,7 +897,7 @@
         private System.Windows.Forms.Panel pnlGameControls;
         private System.Windows.Forms.Panel pnlServer;
         private System.Windows.Forms.RichTextBox rtbMainConsole;
-        private System.Windows.Forms.Panel pnlEngine;
+        private System.Windows.Forms.Panel pnlDebug;
         private System.Windows.Forms.Button btnEnd;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnForward;
@@ -879,6 +949,11 @@
         private System.Windows.Forms.Button button3;
         public System.Windows.Forms.Label lblWhitesRemainingTimeFormated;
         public System.Windows.Forms.Label lblBlacksRemainingTimeFormated;
+        private System.Windows.Forms.Panel pnlTellsAndMoves;
+        private System.Windows.Forms.Panel pnlGameControl;
+        private System.Windows.Forms.Panel pnlGameInfo;
+        private System.Windows.Forms.Button btnShowDebugPanel;
+        private System.Windows.Forms.Button btnTellsAndMoves;
     }
 }
 

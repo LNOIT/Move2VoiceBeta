@@ -1,40 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-
-
-
-
 
 namespace Move2VoiceBeta
 {
-
-     public class Engine
+    public class Engine
     {
-        public string rawNotation = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2";
-        public string outSF = "";
-        public bool sfReadyTowrite = false;
-        
-
+        private Process startSF;
         private FrmMain mainForm;
+        private RichTextBox txtOutput;
+
         public Engine(FrmMain form1)
         {
-            this.mainForm = form1;
-          
+            mainForm = form1;
+            txtOutput = mainForm.rtbEngineOutPut;
         }
 
         public async Task StartSF(string fen, bool stop)
         {
-            string command = "go movetime 10000";
+            string command = "go movetime 100000";
 
-            var startSF_new = new Process
+            startSF = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -46,45 +34,88 @@ namespace Move2VoiceBeta
                 }
             };
 
-            startSF_new.Start();
+            startSF.Start();
 
-            startSF_new.StandardInput.WriteLine("ucinewgame");
-            startSF_new.StandardInput.WriteLine("setoption name UCI_AnalyseMode value true");
-            startSF_new.StandardInput.WriteLine("position fen " + fen);
-            startSF_new.StandardInput.WriteLine(command);
+            startSF.StandardInput.WriteLine("ucinewgame");
+            startSF.StandardInput.WriteLine("setoption name UCI_AnalyseMode value true");
+            startSF.StandardInput.WriteLine("position fen " + fen);
+            startSF.StandardInput.WriteLine(command);
             await Task.Delay(10);
 
             string line;
-            while ((line = startSF_new.StandardOutput.ReadLine()) != null)
+            while ((line = startSF.StandardOutput.ReadLine()) != null)
             {
-                outSF += Environment.NewLine + line;
+                List<string> parsedLines = ParseEngineOutput(line);
 
-                if (line.StartsWith("bestmove") || stop)
+                // Update the output on the main form
+                foreach (string parsedLine in parsedLines)
                 {
-                    // Accessing UI elements from a separate thread:
-                    mainForm.Invoke((MethodInvoker)delegate
-                    {
-                        // Set the Text property in a thread-safe way:
-                        mainForm.rtbEngineOutPut.Text = outSF;
-                    });
-
-                    mainForm.engine_runnig = false;
-                    startSF_new.StandardInput.WriteLine("stop");
-                    await Task.Delay(10);  // give the engine some time to process the 'stop' command
-                    break;
+                    UpdateOutput(parsedLine);
                 }
 
-            }
 
-            outSF = string.Empty;  // Clear outSF after the loop
+            }
+        }
+
+        public void StopEngine()
+        {
+            if (startSF != null && !startSF.HasExited)
+            {
+                startSF.StandardInput.WriteLine("stop");
+                UpdateOutput("STOPPED");
+            }
         }
 
 
+        private void UpdateOutput(string output)
+        {
+            if (txtOutput.InvokeRequired)
+            {
+                txtOutput.Invoke(new Action<string>(UpdateOutput), output);
+            }
+            else
+            {
+                txtOutput.AppendText(output + Environment.NewLine);
+            }
+        }
+        public List<string> ParseEngineOutput(string output)
+        {
+            List<string> relevantLines = new List<string>();
 
+            string[] lines = output.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string line in lines)
+            {
+                if (line.StartsWith("info") && line.Contains("depth") && line.Contains("multipv"))
+                {
+                    string[] tokens = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    string searchDepth = GetTokenValue(tokens, "depth");
+                    string multiPV = GetTokenValue(tokens, "multipv");
+                    string moves = GetMovesFromLine(line);
 
+                    relevantLines.Add($"Search Depth: {searchDepth}, MultiPV: {multiPV}, Moves: {moves}");
+                }
+            }
+
+            return relevantLines;
+        }
+
+        private string GetTokenValue(string[] tokens, string token)
+        {
+            for (int i = 0; i < tokens.Length - 1; i++)
+            {
+                if (tokens[i] == token)
+                {
+                    return tokens[i + 1];
+                }
+            }
+            return string.Empty;
+        }
+
+        private string GetMovesFromLine(string line)
+        {
+            int startIndex = line.IndexOf("pv ") + 3;
+            return line.Substring(startIndex);
+        }
     }
-
-
 }
-
 

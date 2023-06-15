@@ -42,7 +42,22 @@ namespace Move2VoiceBeta
                 throw; // Rethrow the exception to propagate it further
             }
         }
-
+        public void Close()
+        {
+            try
+            {
+                if (tcpSocket != null)
+                {
+                    tcpSocket.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine($"An error occurred while closing the connection: {ex.Message}");
+                throw; // Rethrow the exception to propagate it further
+            }
+        }
         // Method to perform login to the telnet server
         public string Login(string Username, string Password, int LoginTimeOutMs)
         {

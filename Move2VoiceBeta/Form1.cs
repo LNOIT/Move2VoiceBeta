@@ -26,7 +26,7 @@ namespace Move2VoiceBeta
         public string sentence = string.Empty;
         string squareName = string.Empty;
         private char[,] board = new char[8, 8];
-
+        private Engine engine;
         string sideToMove = string.Empty;
         string whitePlayer = string.Empty;
         string blackPlayer = string.Empty;
@@ -58,11 +58,15 @@ namespace Move2VoiceBeta
         string time = string.Empty;
         int timeNumber = 0;
         string pv = string.Empty;
-        Color oldColor_1 = Color.Transparent;
+        
+
+
 
         public FrmMain()
         {
             InitializeComponent();
+            this.Width = Screen.PrimaryScreen.Bounds.Width - 50;
+            this.Height = Screen.PrimaryScreen.Bounds.Height - 50;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.KeyPreview = true;
             var fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -71,9 +75,13 @@ namespace Move2VoiceBeta
             DisplayBoard(board);
             this.Load += FrmMain_Load;  // Add a handler for the Load event
             this.tbUser.Enter += new EventHandler(tbUser_Enter);
-           // this.richTextBox2.Enter += new EventHandler(richTextBox2_KeyDown);
-          
+            // this.richTextBox2.Enter += new EventHandler(richTextBox2_KeyDown);
+
+            engine = new Engine(this); // Pass the instance of FrmMain to the Engine class
             speechQueue = new SpeechQueue(1);
+            pnlServer.Width = this.Width - 550;
+            rtbMainConsole.Width = this.Width - 560;
+
 
         }
 
@@ -90,6 +98,30 @@ namespace Move2VoiceBeta
 
             //Code for saving pwd etc
         }
+
+        private void ReconnectToTelnetServer()
+        {
+            try
+            {
+                // Close the existing connection if it's still open
+                if (tc.IsConnected)
+                    tc.Close();
+
+                // Create a new instance of TelnetConnection
+                tc = new TelnetConnection("freechess.org", 5000);
+
+                // Perform any login or initialization steps as needed
+
+                // Continue communication with the telnet server
+                // You can start sending commands or performing other operations
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during reconnection
+                // You can log the error, display a message to the user, or take appropriate action
+            }
+        }
+
 
         private void Send(string s)
         {
@@ -518,13 +550,14 @@ namespace Move2VoiceBeta
             UpdateBoard(board);
 
         }
+        Color darkBrown = Color.FromArgb(132, 71, 10);
+        Color lightBrown = Color.FromArgb(250, 245, 200);
         public void DisplayBoard(char[,] board)
         {
             try
             {
                 int squareSize = 60; // or whatever size you prefer
-                Color darkBrown = Color.FromArgb(132, 71, 10);
-                Color lightBrown = Color.FromArgb(250, 245, 200);
+                
                 int tabIndex = 0;
 
                 // clear the panel
@@ -687,40 +720,104 @@ namespace Move2VoiceBeta
             }
         }
 
-        private void PictureBox_Click(object sender, EventArgs e)
+
+        private Dictionary<string, Color> originalColors = new Dictionary<string, Color>();
+
+        private void StoreOriginalColors()
         {
-            string squareName = string.Empty;
-            // Cast the sender object to PictureBox to access its properties
-            PictureBox pictureBox = (PictureBox)sender;
-            if (oldColor_1 != Color.Transparent)
+            foreach (Control control in pnlBoard.Controls)
             {
-                oldColor_1 = pictureBox.BackColor;
-            }
-            else 
-            {
-                
-                Color oldColor_2 = pictureBox.BackColor;
-            }
-
-          
-           
-            // Retrieve the square name from the Tag property
-           
-            if (squareName != pictureBox.Tag.ToString())
-            {
-                squareName += pictureBox.Tag.ToString();
-                pictureBox.BackColor = Color.LightGray;
-
-                if (squareName.Length == 4)
+                if (control is PictureBox pictureBox)
                 {
-                    Send(squareName);
-                    squareName = string.Empty;
+                    pictureBox.Tag = pictureBox.BackColor;
                 }
             }
-
-            
-            
         }
+
+        private void RestoreSquareColor()
+        {
+            foreach (Control c in pnlBoard.Controls)
+            {
+                if (c.BackColor == Color.LightGray)
+                {
+                    if (c.Tag.ToString() == squareNameTmp)
+                    {
+                        c.BackColor = oldColor_1;
+                    }
+                    else
+                    {
+                       // c.BackColor = oldColor_2;
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+        int timesClicked = 0;
+        string squareNameTmp = string.Empty;
+        Color oldColor_1 = Color.Empty;
+       // Color oldColor_2 = Color.Empty;
+
+        private void PictureBox_Click(object sender, EventArgs e)
+        {
+            if (squareName.Length == 0) { StoreOriginalColors(); }
+           
+            PictureBox pictureBox = (PictureBox)sender;
+            timesClicked++;
+
+            if (timesClicked == 3)
+            {
+                timesClicked = 1;
+            }
+
+            if (pictureBox.BackColor != Color.LightGray)
+            {
+                if (timesClicked == 1)
+                {
+                    oldColor_1 = pictureBox.BackColor;
+                    squareNameTmp = pictureBox.Name;
+                }
+               
+            }
+
+            if (squareName != pictureBox.Name)
+            {
+                if (timesClicked == 1)
+                {
+                    squareName = pictureBox.Name;
+                    pictureBox.BackColor = Color.LightGray;
+                }
+                else
+                {
+                    squareName += pictureBox.Name;
+
+                    if (squareName.Length == 4)
+                    {
+                        Send(squareName);
+                       
+                    }
+                    squareName = string.Empty;
+                }
+
+               
+            }
+            else
+            {
+                pictureBox.BackColor = oldColor_1;
+                squareName = string.Empty;
+            }
+            
+      
+            pnlBoard.Refresh();
+        }
+
+
         private void PictureBox_Enter(object sender, EventArgs e)
         {
             PictureBox pictureBox = sender as PictureBox; // Cast sender to PictureBox
@@ -809,29 +906,19 @@ namespace Move2VoiceBeta
         }
 
 
-
         private void StartStockFish()
         {
-            Task.Run(() => sfAsync());
+            engine = new Engine(this); // Create the Engine instance if not already created
+            Task.Run(() => engine.StartSF(tbGameString.Text, false));
         }
 
         private void StopStockFish()
         {
-            Task.Run(() => sf_stopAsync());
+            if (engine != null)
+            {
+                Task.Run(() => engine.StartSF(tbGameString.Text, true));
+            }
         }
-
-        public async Task sfAsync()
-        {
-            Engine eng = new Engine(this); // Pass current instance of FrmMain
-            await eng.StartSF(tbGameString.Text, false);
-        }
-
-        public async Task sf_stopAsync()
-        {
-            Engine eng = new Engine(this); // Pass current instance of FrmMain
-            await eng.StartSF(tbGameString.Text, true);
-        }
-
 
         private void btnStartEngine_Click(object sender, EventArgs e)
         {
@@ -839,20 +926,28 @@ namespace Move2VoiceBeta
             tbPrompt.Focus();
         }
 
+        public async Task sfAsync()
+        {
+          //  engine = new Engine(this); // Pass current instance of FrmMain
+            await engine.StartSF(tbGameString.Text, false);
+        }
+
+        public async Task sf_stopAsync()
+        {
+           // Engine eng = new Engine(this); // Pass current instance of FrmMain
+            await engine.StartSF(tbGameString.Text, true);
+        }
+
+
         private void tmrEngine_Tick(object sender, EventArgs e)
         {
-            if (!engine_runnig)
-            {
-                rtbEngineOutPut.Text = tmp;
-                rtbEngineOutPut.SelectionStart = rtbEngineOutPut.Text.Length;
-                rtbEngineOutPut.ScrollToCaret();
-                tmrEngine.Enabled = false;
-            }
+           
         }
 
 
         public string GetLastTwoLines(RichTextBox rtbEngineOutput)
         {
+            //Not needed anymore
             if (rtbEngineOutput.Lines.Length >= 2)
             {
                 string lastLine = rtbEngineOutput.Lines[rtbEngineOutput.Lines.Length - 1];
@@ -904,8 +999,7 @@ namespace Move2VoiceBeta
 
         private void btnStopEngine_Click(object sender, EventArgs e)
         {
-            StopStockFish();
-            tmrEngine.Enabled = false;
+            engine.StopEngine();
             tbPrompt.Focus();
 
         }
@@ -1177,21 +1271,7 @@ namespace Move2VoiceBeta
             }
         }
 
-        private void rtbEngineOutPut_TextChanged(object sender, EventArgs e)
-        {
-            rtbEngineOutPut.SelectionStart = rtbEngineOutPut.Text.Length;
-            rtbEngineOutPut.ScrollToCaret();
-            //Speech speech = new Speech((int)nudSpeachrate.Value);
-            sentence = GetPricipalVariation(rtbEngineOutPut);
-
-            sentence = interpetEngineLine(sentence);
-
-            //speech.SpeakAsync(interpetEngineLine(sentence)); 
-
-            speechQueue.EnqueueSpeech("Line ready press f6 to read it");
-
-
-        }
+       
 
         private void WriteLog()
         {
@@ -1207,7 +1287,7 @@ namespace Move2VoiceBeta
             catch (Exception ex)
             {
                 // Handle or display the error
-                Console.WriteLine(ex.Message);
+                //Console.WriteLine(ex.Message);
             }
 
         }
@@ -1791,6 +1871,38 @@ namespace Move2VoiceBeta
             // Speak another sentence using the new voice
             synthesizer.Speak("This is the voice of Microsoft Zira Desktop"); */
 
+        }
+
+        private void FrmMain_Resize(object sender, EventArgs e)
+        {
+            pnlServer.Width = this.Width - 550;
+            rtbMainConsole.Width = this.Width - 560;
+            rtbEngineOutPut.Width = rtbMainConsole.Width;
+        }
+
+        private void btnShowDebugPanel_Click(object sender, EventArgs e)
+        {
+            if (pnlDebug.Visible) 
+            {
+                pnlDebug.Visible = false;       
+            }
+            else
+            {
+                pnlDebug.Visible = true;
+            }
+        }
+
+        private void btnTellsAndMoves_Click(object sender, EventArgs e)
+        {
+            if (pnlTellsAndMoves.Visible)
+            {
+                pnlTellsAndMoves.Visible = false;
+            }
+            else
+            {
+                pnlTellsAndMoves.Visible = true;
+            }
+            
         }
     }
 }
