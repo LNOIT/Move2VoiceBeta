@@ -639,6 +639,8 @@ namespace Move2VoiceBeta
                         pnlBoard.Controls.Add(pictureBox);
                         pictureBox.Click += PictureBox_Click;
                         pictureBox.Enter += PictureBox_Enter;
+                        pictureBox.MouseEnter += PictureBox_MouseEnter;
+                        pictureBox.MouseLeave += PictureBox_MouseLeave;
                     }
                 }
             }
@@ -807,124 +809,56 @@ namespace Move2VoiceBeta
                 // If the function encounters an error, you might want to handle it accordingly.
             }
         }
-        private Dictionary<string, Color> originalColors = new Dictionary<string, Color>();
-
-        private void StoreOriginalColors()
-        {
-            foreach (Control control in pnlBoard.Controls)
-            {
-                if (control is PictureBox pictureBox)
-                {
-                    pictureBox.Tag = pictureBox.BackColor;
-                }
-            }
-        }
-
-        private void RestoreSquareColor()
-        {
-            foreach (Control c in pnlBoard.Controls)
-            {
-                if (c.BackColor == Color.LightGray)
-                {
-                    if (c.Tag.ToString() == squareNameTmp)
-                    {
-                        c.BackColor = oldColor_1;
-                    }
-                    else
-                    {
-                       // c.BackColor = oldColor_2;
-                    }
-                }
-            }
-        }
-
-
-
-
-
-
-
-
+  
         int timesClicked = 0;
-        string squareNameTmp = string.Empty;
         Color oldColor_1 = Color.Empty;
-       // Color oldColor_2 = Color.Empty;
+        Color oldColor_2 = Color.Empty;
 
         private void PictureBox_Click(object sender, EventArgs e)
         {
-            //if (squareName.Length == 0) { StoreOriginalColors(); }
-           
-            PictureBox pictureBox = (PictureBox)sender;
             timesClicked++;
 
-            if (timesClicked == 3)
+            PictureBox pictureBox = (PictureBox)sender;
+            pictureBox.BackColor = oldColor_2;
+
+            if (timesClicked == 1)
             {
-                timesClicked = 1;
-                tbClickOnTheSquareToMove.Text = string.Empty;
-            }
-
-            if (pictureBox.BackColor != Color.LightGray)
-            {
-                if (timesClicked == 1)
-                {
-                    oldColor_1 = pictureBox.BackColor;
-                    squareNameTmp = pictureBox.Name;
-                    pictureBox.BackColor = Color.LightGray;
-
-                }
-               
-            }
-
-            if (squareName != pictureBox.Name)
-            {
-                if (timesClicked == 1)
-                {
-                    squareName = pictureBox.Name;
-                    tbClickOnTheSquareToMove.Text += squareName;
-                    
-
-
-                }
-                else
-                {
-                    squareName += pictureBox.Name;
-                    tbClickOnTheSquareToMove.Text += squareName;
-
-                    if (squareName.Length == 4)
-                    {
-                        Send(squareName);
-                        tbClickOnTheSquareToMove.Text = string.Empty;
-                        rtbSendHistory.Text += squareName + Environment.NewLine;
-                        
-                        foreach (Control control in pnlBoard.Controls)
-                        {
-                            if (control is PictureBox pb)
-                            {
-                                if (pb.Name == squareNameTmp)
-                                {
-                                    pb.BackColor = oldColor_1;
-                                }
-                            }
-                        }
-
-
-
-
-                    }
-                    squareName = string.Empty;
-                }
-
-               
+                oldColor_1 = pictureBox.BackColor;
+                pictureBox.BackColor = Color.Gray;
             }
             else
             {
-                pictureBox.BackColor = oldColor_1;
-                squareName = string.Empty;
+                foreach (Control c in pnlBoard.Controls)
+                {
+                    if (c.BackColor == Color.Gray)
+                    {
+                        c.BackColor = oldColor_1;
+                    }
+                }
+
+                timesClicked = 0;
             }
-            // 
-            // pictureBox.BackColor = Color.LightGray;
+
 
             pnlBoard.Refresh();
+        }
+
+        private void PictureBox_MouseEnter(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = sender as PictureBox;
+
+            oldColor_2 = pictureBox.BackColor;
+            pictureBox.BackColor = Color.LightGray;
+        }
+
+        private void PictureBox_MouseLeave(object sender, EventArgs e)
+        {
+            PictureBox pictureBox = sender as PictureBox;
+
+            if (pictureBox.BackColor == Color.LightGray)
+            {
+                pictureBox.BackColor = oldColor_2;
+            }
         }
 
 
