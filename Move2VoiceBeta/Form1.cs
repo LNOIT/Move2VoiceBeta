@@ -474,7 +474,7 @@ namespace Move2VoiceBeta
 
 
 
-            string[] digitWords = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+            string[] digitWords = { "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
             string[] tensWords = { "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
             string[] teensWords = { "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
 
@@ -533,7 +533,14 @@ namespace Move2VoiceBeta
             ExtractFields(tbLastResponse.Text);
             var fen = tbGameString.Text;
             var board = ci.FenToBoard(fen);
-            UpdateBoard(board);
+            if (cbReverseBoard.Checked)
+            {
+                UpdateReversedBoard(board);
+            }
+            else
+            {
+                UpdateBoard(board);
+            }
         }
 
 
@@ -720,7 +727,86 @@ namespace Move2VoiceBeta
             }
         }
 
+        
+        public void UpdateReversedBoard(char[,] board)
+        {
+            try
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        string pictureBoxName = $"{(char)('h' - j)}{8 - i}";
+                        PictureBox pictureBox = (PictureBox)pnlBoard.Controls[pictureBoxName];
 
+                        if (pictureBox != null)
+                        {
+                            switch (board[7 - i, 7 - j]) // Reversed row and column index
+                            {
+                                case 'r':
+                                    pictureBox.Image = imageList1.Images[0];
+                                    pictureBox.Tag = $"Black Rook {pictureBoxName}";
+                                    break;
+                                case 'n':
+                                    pictureBox.Image = imageList1.Images[1];
+                                    pictureBox.Tag = $"Black Knight {pictureBoxName}";
+                                    break;
+                                case 'b':
+                                    pictureBox.Image = imageList1.Images[2];
+                                    pictureBox.Tag = $"Black Bishop {pictureBoxName}";
+                                    break;
+                                case 'q':
+                                    pictureBox.Image = imageList1.Images[3];
+                                    pictureBox.Tag = $"Black Queen {pictureBoxName}";
+                                    break;
+                                case 'k':
+                                    pictureBox.Image = imageList1.Images[4];
+                                    pictureBox.Tag = $"Black King {pictureBoxName}";
+                                    break;
+                                case 'p':
+                                    pictureBox.Image = imageList1.Images[5];
+                                    pictureBox.Tag = $"Black Pawn {pictureBoxName}";
+                                    break;
+                                case 'R':
+                                    pictureBox.Image = imageList1.Images[6];
+                                    pictureBox.Tag = $"White Rook {pictureBoxName}";
+                                    break;
+                                case 'N':
+                                    pictureBox.Image = imageList1.Images[7];
+                                    pictureBox.Tag = $"White Knight {pictureBoxName}";
+                                    break;
+                                case 'B':
+                                    pictureBox.Image = imageList1.Images[8];
+                                    pictureBox.Tag = $"White Bishop {pictureBoxName}";
+                                    break;
+                                case 'Q':
+                                    pictureBox.Image = imageList1.Images[9];
+                                    pictureBox.Tag = $"White Queen {pictureBoxName}";
+                                    break;
+                                case 'K':
+                                    pictureBox.Image = imageList1.Images[10];
+                                    pictureBox.Tag = $"White King {pictureBoxName}";
+                                    break;
+                                case 'P':
+                                    pictureBox.Image = imageList1.Images[11];
+                                    pictureBox.Tag = $"White Pawn {pictureBoxName}";
+                                    break;
+                                case '-':
+                                    pictureBox.Image = null;
+                                    pictureBox.Tag = pictureBoxName;
+                                    break;
+                            }
+                        }
+                    }
+                }
+
+                pnlBoard.Refresh();
+            }
+            catch
+            {
+                // If the function encounters an error, you might want to handle it accordingly.
+            }
+        }
         private Dictionary<string, Color> originalColors = new Dictionary<string, Color>();
 
         private void StoreOriginalColors()
@@ -766,7 +852,7 @@ namespace Move2VoiceBeta
 
         private void PictureBox_Click(object sender, EventArgs e)
         {
-            if (squareName.Length == 0) { StoreOriginalColors(); }
+            //if (squareName.Length == 0) { StoreOriginalColors(); }
            
             PictureBox pictureBox = (PictureBox)sender;
             timesClicked++;
@@ -774,6 +860,7 @@ namespace Move2VoiceBeta
             if (timesClicked == 3)
             {
                 timesClicked = 1;
+                tbClickOnTheSquareToMove.Text = string.Empty;
             }
 
             if (pictureBox.BackColor != Color.LightGray)
@@ -782,6 +869,8 @@ namespace Move2VoiceBeta
                 {
                     oldColor_1 = pictureBox.BackColor;
                     squareNameTmp = pictureBox.Name;
+                    pictureBox.BackColor = Color.LightGray;
+
                 }
                
             }
@@ -791,16 +880,36 @@ namespace Move2VoiceBeta
                 if (timesClicked == 1)
                 {
                     squareName = pictureBox.Name;
-                    pictureBox.BackColor = Color.LightGray;
+                    tbClickOnTheSquareToMove.Text += squareName;
+                    
+
+
                 }
                 else
                 {
                     squareName += pictureBox.Name;
+                    tbClickOnTheSquareToMove.Text += squareName;
 
                     if (squareName.Length == 4)
                     {
                         Send(squareName);
-                       
+                        tbClickOnTheSquareToMove.Text = string.Empty;
+                        rtbSendHistory.Text += squareName + Environment.NewLine;
+                        
+                        foreach (Control control in pnlBoard.Controls)
+                        {
+                            if (control is PictureBox pb)
+                            {
+                                if (pb.Name == squareNameTmp)
+                                {
+                                    pb.BackColor = oldColor_1;
+                                }
+                            }
+                        }
+
+
+
+
                     }
                     squareName = string.Empty;
                 }
@@ -812,8 +921,9 @@ namespace Move2VoiceBeta
                 pictureBox.BackColor = oldColor_1;
                 squareName = string.Empty;
             }
-            
-      
+            // 
+            // pictureBox.BackColor = Color.LightGray;
+
             pnlBoard.Refresh();
         }
 
@@ -1843,33 +1953,34 @@ namespace Move2VoiceBeta
 
         private void button3_Click(object sender, EventArgs e)
         {
-        /*
-         * We must scan after available voices if we want to use other tan default
-         * so this will not be impllemented
+            /*
+             * We must scan after available voices if we want to use other tan default
+             * so this will not be impllemented
 
-            // Create an instance of SpeechSynthesizer
-            SpeechSynthesizer synthesizer = new SpeechSynthesizer();
+                // Create an instance of SpeechSynthesizer
+                SpeechSynthesizer synthesizer = new SpeechSynthesizer();
 
-            // Get the available voices
-            IEnumerable<InstalledVoice> voices = synthesizer.GetInstalledVoices();
+                // Get the available voices
+                IEnumerable<InstalledVoice> voices = synthesizer.GetInstalledVoices();
 
-            // Switch to a specific voice
-            if (voices.Any(v => v.VoiceInfo.Name == "Microsoft David Desktop"))
-            {
-                synthesizer.SelectVoice("Microsoft David Desktop");
-            }
+                // Switch to a specific voice
+                if (voices.Any(v => v.VoiceInfo.Name == "Microsoft David Desktop"))
+                {
+                    synthesizer.SelectVoice("Microsoft David Desktop");
+                }
 
-            // Speak a sentence using the selected voice
-            synthesizer.Speak("This is the voice of Microsoft David Desktop");
+                // Speak a sentence using the selected voice
+                synthesizer.Speak("This is the voice of Microsoft David Desktop");
 
-            // Switch to another voice
-            if (voices.Any(v => v.VoiceInfo.Name == "Microsoft Zira Desktop"))
-            {
-                synthesizer.SelectVoice("Microsoft Zira Desktop");
-            }
+                // Switch to another voice
+                if (voices.Any(v => v.VoiceInfo.Name == "Microsoft Zira Desktop"))
+                {
+                    synthesizer.SelectVoice("Microsoft Zira Desktop");
+                }
 
-            // Speak another sentence using the new voice
-            synthesizer.Speak("This is the voice of Microsoft Zira Desktop"); */
+                // Speak another sentence using the new voice
+                synthesizer.Speak("This is the voice of Microsoft Zira Desktop"); */
+            UpdateReversedBoard(board);
 
         }
 
@@ -1903,6 +2014,24 @@ namespace Move2VoiceBeta
                 pnlTellsAndMoves.Visible = true;
             }
             
+        }
+
+        private void cbReverseBoard_Click(object sender, EventArgs e)
+        {
+            if (cbReverseBoard.Checked)
+            {
+                UpdateBoard(board);
+            }
+            else 
+            {
+                UpdateReversedBoard(board);
+            }
+        }
+
+        private void rtbEngineOutPut_TextChanged(object sender, EventArgs e)
+        {
+            rtbEngineOutPut.SelectionStart = rtbEngineOutPut.Text.Length;
+            rtbEngineOutPut.ScrollToCaret();
         }
     }
 }
