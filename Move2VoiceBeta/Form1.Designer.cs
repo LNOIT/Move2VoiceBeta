@@ -37,6 +37,7 @@
             this.lblAmIPlaying = new System.Windows.Forms.Label();
             this.tbGameString = new System.Windows.Forms.TextBox();
             this.pnlGameControls = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button2 = new System.Windows.Forms.Button();
             this.btnMoves = new System.Windows.Forms.Button();
             this.btnEnd = new System.Windows.Forms.Button();
@@ -92,9 +93,9 @@
             this.lblBlacksRemainingTimeFormated = new System.Windows.Forms.Label();
             this.pnlGameControl = new System.Windows.Forms.Panel();
             this.pnlGameInfo = new System.Windows.Forms.Panel();
-            this.tbClickOnTheSquareToMove = new System.Windows.Forms.TextBox();
-            this.rtbSendHistory = new System.Windows.Forms.RichTextBox();
             this.cbReverseBoard = new System.Windows.Forms.CheckBox();
+            this.rtbSendHistory = new System.Windows.Forms.RichTextBox();
+            this.tbClickOnTheSquareToMove = new System.Windows.Forms.TextBox();
             this.pnlBoard.SuspendLayout();
             this.pnlGameControls.SuspendLayout();
             this.pnlServer.SuspendLayout();
@@ -168,6 +169,7 @@
             // 
             // pnlGameControls
             // 
+            this.pnlGameControls.Controls.Add(this.checkBox1);
             this.pnlGameControls.Controls.Add(this.button2);
             this.pnlGameControls.Controls.Add(this.btnMoves);
             this.pnlGameControls.Controls.Add(this.btnEnd);
@@ -178,6 +180,18 @@
             this.pnlGameControls.Name = "pnlGameControls";
             this.pnlGameControls.Size = new System.Drawing.Size(480, 69);
             this.pnlGameControls.TabIndex = 1;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(375, 4);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(75, 23);
+            this.checkBox1.TabIndex = 27;
+            this.checkBox1.Text = "Voice";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox_CheckedChanged);
             // 
             // button2
             // 
@@ -857,12 +871,16 @@
             this.pnlGameInfo.Size = new System.Drawing.Size(467, 191);
             this.pnlGameInfo.TabIndex = 26;
             // 
-            // tbClickOnTheSquareToMove
+            // cbReverseBoard
             // 
-            this.tbClickOnTheSquareToMove.Location = new System.Drawing.Point(12, 142);
-            this.tbClickOnTheSquareToMove.Name = "tbClickOnTheSquareToMove";
-            this.tbClickOnTheSquareToMove.Size = new System.Drawing.Size(52, 20);
-            this.tbClickOnTheSquareToMove.TabIndex = 25;
+            this.cbReverseBoard.AutoSize = true;
+            this.cbReverseBoard.Location = new System.Drawing.Point(158, 145);
+            this.cbReverseBoard.Name = "cbReverseBoard";
+            this.cbReverseBoard.Size = new System.Drawing.Size(80, 17);
+            this.cbReverseBoard.TabIndex = 27;
+            this.cbReverseBoard.Text = "checkBox1";
+            this.cbReverseBoard.UseVisualStyleBackColor = true;
+            this.cbReverseBoard.Click += new System.EventHandler(this.cbReverseBoard_Click);
             // 
             // rtbSendHistory
             // 
@@ -874,16 +892,12 @@
             this.rtbSendHistory.TabStop = false;
             this.rtbSendHistory.Text = "";
             // 
-            // cbReverseBoard
+            // tbClickOnTheSquareToMove
             // 
-            this.cbReverseBoard.AutoSize = true;
-            this.cbReverseBoard.Location = new System.Drawing.Point(158, 145);
-            this.cbReverseBoard.Name = "cbReverseBoard";
-            this.cbReverseBoard.Size = new System.Drawing.Size(80, 17);
-            this.cbReverseBoard.TabIndex = 27;
-            this.cbReverseBoard.Text = "checkBox1";
-            this.cbReverseBoard.UseVisualStyleBackColor = true;
-            this.cbReverseBoard.Click += new System.EventHandler(this.cbReverseBoard_Click);
+            this.tbClickOnTheSquareToMove.Location = new System.Drawing.Point(12, 142);
+            this.tbClickOnTheSquareToMove.Name = "tbClickOnTheSquareToMove";
+            this.tbClickOnTheSquareToMove.Size = new System.Drawing.Size(52, 20);
+            this.tbClickOnTheSquareToMove.TabIndex = 25;
             // 
             // FrmMain
             // 
@@ -991,6 +1005,7 @@
         private System.Windows.Forms.TextBox tbClickOnTheSquareToMove;
         private System.Windows.Forms.RichTextBox rtbSendHistory;
         private System.Windows.Forms.CheckBox cbReverseBoard;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

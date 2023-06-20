@@ -21,6 +21,11 @@ public class SpeechQueue
         SpeakNext();
     }
 
+    public void Dequeue()
+    {
+        speechQueue.Dequeue();
+    }
+
     private void SpeakNext()
     {
         if (!isSpeaking && speechQueue.Count > 0)
@@ -35,5 +40,15 @@ public class SpeechQueue
     {
         isSpeaking = false;
         SpeakNext();
+    }
+
+    public void MuteSpeech()
+    {
+        synthesizer.Volume = 0;
+    }
+
+    public void UnmuteSpeech()
+    {
+        synthesizer.Volume = 50;
     }
 }

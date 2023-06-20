@@ -32,5 +32,15 @@ namespace Move2VoiceBeta
 
             }
         }
+
+        public void Mute()
+        {
+            synthesizer.Volume = 0;
+        }
+
+        public void UnMute()
+        {
+            synthesizer.Volume = 50;
+        }
     }
 }

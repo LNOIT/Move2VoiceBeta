@@ -58,7 +58,7 @@ namespace Move2VoiceBeta
         string time = string.Empty;
         int timeNumber = 0;
         string pv = string.Empty;
-        
+
 
 
 
@@ -128,10 +128,6 @@ namespace Move2VoiceBeta
 
             if (tc.IsConnected && tbPrompt.Text != "exit")
             {
-                if (s=="moves") 
-                {
-                    s = string.Empty;
-                }
                 speechQueue.EnqueueSpeech(s);
                 rtbMainConsole.Text += s;
                 rtbMainConsole.SelectionStart = rtbMainConsole.Text.Length;
@@ -141,7 +137,7 @@ namespace Move2VoiceBeta
 
                 tbLastResponse.Text = tc.Read();
             }
-            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%","");; 
+            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%", ""); ;
             rtbMainConsole.SelectionStart = rtbMainConsole.Text.Length;
             rtbMainConsole.ScrollToCaret();
         }
@@ -159,7 +155,7 @@ namespace Move2VoiceBeta
             }
 
             tbLastResponse.Text = tc.Read();
-            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%","");
+            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%", "");
             rtbMainConsole.SelectionStart = rtbMainConsole.Text.Length;
             rtbMainConsole.ScrollToCaret();
             string s = tc.Login(tbUser.Text, tbPassword.Text, 100);
@@ -174,21 +170,31 @@ namespace Move2VoiceBeta
             tbLastResponse.Text = tc.Read();
             tmrRead.Enabled = true;
             btnRead.BackColor = Color.Green;
-            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%","");;
+            rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%", ""); ;
             rtbMainConsole.SelectionStart = rtbMainConsole.Text.Length;
             rtbMainConsole.ScrollToCaret();
             tbPrompt.Focus();
+
+            Send("set style 12");
+            speechQueue.Dequeue();
+
         }
 
         private void tbPrompt_KeyDown(object sender, KeyEventArgs e)
         {
             Speech speech = new Speech((int)nudSpeachrate.Value);
+
+            if (!checkBox1.Checked)
+            {
+                speech.Mute();
+            }
+            
             if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
             {
                 char keyChar = (char)('0' + (e.KeyCode - Keys.D0));
                 speech.SpeakAsync(keyChar.ToString());
             }
-            else 
+            else
             {
                 speech.SpeakAsync(e.KeyCode.ToString());
             }
@@ -239,7 +245,7 @@ namespace Move2VoiceBeta
             richTextBox2.Clear();
             int startPos = s.LastIndexOf("<12>");
             int row = 0;
-            
+
             string stmp = s.Substring(startPos);
             label1.Text = stmp;
             // Splitting the string into parts using the space character as a delimiter
@@ -255,13 +261,13 @@ namespace Move2VoiceBeta
             }
             // Extracting the fields
             sideToMove = parts[9];
-            if (sideToMove == "W") 
-            { 
-                whiteToMove = false; 
-            } 
-            else 
-            { 
-                whiteToMove = true; 
+            if (sideToMove == "W")
+            {
+                whiteToMove = false;
+            }
+            else
+            {
+                whiteToMove = true;
             }
             amIPlaying = parts[10];
             whitePlayer = parts[17];
@@ -282,7 +288,7 @@ namespace Move2VoiceBeta
             whitesRemainingTime = parts[24];
             blacksRemainingTime = parts[25];
             lastMove = parts[27];
-            
+
             Speech speech = new Speech((int)nudSpeachrate.Value);
             sentence = InterpretLastMove(lastMove, whiteToMove);
             if (lastMove == "o-o")
@@ -294,20 +300,21 @@ namespace Move2VoiceBeta
                 sentence = "castles Queenside";
             }
             sentence = ConvertDigitsToWords(sentence);
-            if (!whiteToMove) {
+            if (!whiteToMove)
+            {
                 int cm = 0;
                 cm = Convert.ToInt32(currentMoveNumber);
                 cm--;
                 currentMoveNumber = ConvertDigitsToWords(cm.ToString());
-            // there is a bug on the serverside that does not add 1 to the 
-            //movenumber on whites turn, this bug occurs strangely enough only after move 1,
-            // which means further handling but this will do for now, the movenumber is read
-            // correctly after move 2. I will check with FICS
-            // 
+                // there is a bug on the serverside that does not add 1 to the 
+                //movenumber on whites turn, this bug occurs strangely enough only after move 1,
+                // which means further handling but this will do for now, the movenumber is read
+                // correctly after move 2. I will check with FICS
+                // 
             }
             speechQueue.EnqueueSpeech(currentMoveNumber + " " + sentence);
-            
-       
+
+
             lblsideToMove.Text = sideToMove;
             lblWhitePlayer.Text = whitePlayer;
             lblBlackPlayer.Text = blackPlayer;
@@ -420,18 +427,18 @@ namespace Move2VoiceBeta
 
 
         private string FormatTime(int seconds)
-{
-    TimeSpan time = TimeSpan.FromSeconds(seconds);
-    string timeFormatted = time.ToString(@"hh\:mm\:ss");
-    return timeFormatted;
-}
+        {
+            TimeSpan time = TimeSpan.FromSeconds(seconds);
+            string timeFormatted = time.ToString(@"hh\:mm\:ss");
+            return timeFormatted;
+        }
         private string InterpretLastMove(string s, bool isWhitesTurn)
         {
             Dictionary<string, string> replacementTextWhite = new Dictionary<string, string>()
         {
         { "K/", "White King moves " },{ "Q/", "White Queen moves " }, { "R/", "White Rook moves " }, { "B/", "White Bishop moves " },{ "N/", "White Night moves " },{ "P/", "White Pawn moves " },
         };
-            
+
 
             Dictionary<string, string> replacementTextBlack = new Dictionary<string, string>()
         {
@@ -519,10 +526,11 @@ namespace Move2VoiceBeta
 
                 return result.Trim();
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return input;
-                    }
-            
+            }
+
         }
 
 
@@ -564,7 +572,7 @@ namespace Move2VoiceBeta
             try
             {
                 int squareSize = 60; // or whatever size you prefer
-                
+
                 int tabIndex = 0;
 
                 // clear the panel
@@ -729,7 +737,7 @@ namespace Move2VoiceBeta
             }
         }
 
-        
+
         public void UpdateReversedBoard(char[,] board)
         {
             try
@@ -809,7 +817,7 @@ namespace Move2VoiceBeta
                 // If the function encounters an error, you might want to handle it accordingly.
             }
         }
-  
+
         int timesClicked = 0;
         Color oldColor_1 = Color.Empty;
         Color oldColor_2 = Color.Empty;
@@ -865,15 +873,15 @@ namespace Move2VoiceBeta
         private void PictureBox_Enter(object sender, EventArgs e)
         {
             PictureBox pictureBox = sender as PictureBox; // Cast sender to PictureBox
-           
+
             sentence = pictureBox.Tag.ToString();
             if (pictureBox.Tag.ToString().Length > 2)
             {
                 speechQueue.EnqueueSpeech(sentence);
             }
-            
-                
-           
+
+
+
         }
         private async void FocusEachPictureBoxSequentially()
         {
@@ -972,20 +980,20 @@ namespace Move2VoiceBeta
 
         public async Task sfAsync()
         {
-          //  engine = new Engine(this); // Pass current instance of FrmMain
+            //  engine = new Engine(this); // Pass current instance of FrmMain
             await engine.StartSF(tbGameString.Text, false);
         }
 
         public async Task sf_stopAsync()
         {
-           // Engine eng = new Engine(this); // Pass current instance of FrmMain
+            // Engine eng = new Engine(this); // Pass current instance of FrmMain
             await engine.StartSF(tbGameString.Text, true);
         }
 
 
         private void tmrEngine_Tick(object sender, EventArgs e)
         {
-           
+
         }
 
 
@@ -1105,7 +1113,7 @@ namespace Move2VoiceBeta
             if (tbLastResponse.Text.Length > 2)
             {
                 bool isHandled = false;
-                
+
                 string[] patterns = { "{", "kibitz", "tells", "Movelist for game " };
                 foreach (string pattern in patterns)
                 {
@@ -1114,13 +1122,13 @@ namespace Move2VoiceBeta
                         switch (pattern)
                         {
                             case "{":
-                                rtbGames.Text += tbLastResponse.Text.Replace("fics%","");;
+                                rtbGames.Text += tbLastResponse.Text.Replace("fics%", ""); ;
                                 isHandled = true;
                                 break;
                             case "kibitz":
                             case "tells":
                                 Speech speech = new Speech((int)nudSpeachrate.Value);
-                                sentence= tbLastResponse.Text.Replace("fics%","");
+                                sentence = tbLastResponse.Text.Replace("fics%", "");
                                 speechQueue.EnqueueSpeech(sentence);
                                 rtbTells.Text += tbLastResponse.Text.Replace("fics%", "");
                                 break;
@@ -1135,9 +1143,9 @@ namespace Move2VoiceBeta
                 }
                 if (!isHandled)
                 {
-                 
-                    rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%","");
-                  
+
+                    rtbMainConsole.Text += tbLastResponse.Text.Replace("fics%", "");
+
                 }
             }
 
@@ -1156,7 +1164,7 @@ namespace Move2VoiceBeta
         {
             Send("moves");
             ChessInterface ci = new ChessInterface();
-            rtbMovesListRaw.Text = tbLastResponse.Text.Replace("fics%","");
+            rtbMovesListRaw.Text = tbLastResponse.Text.Replace("fics%", "");
             tbPrompt.Focus();
         }
 
@@ -1242,7 +1250,7 @@ namespace Move2VoiceBeta
 
         private void rtbMainConsole_TextChanged(object sender, EventArgs e)
         {
-            
+
             rtbMainConsole.SelectionStart = rtbMainConsole.Text.Length;
             rtbMainConsole.ScrollToCaret();
         }
@@ -1315,7 +1323,7 @@ namespace Move2VoiceBeta
             }
         }
 
-       
+
 
         private void WriteLog()
         {
@@ -1370,7 +1378,7 @@ namespace Move2VoiceBeta
             if (e.KeyCode == Keys.F1)
             {
                 Speech speech = new Speech((int)nudSpeachrate.Value);
-                speech.SpeakAsync("New Key: F1 brings up this menu. oaoao  New Key: F2 starts the engine. In this test version, the engine's execution time is 10 seconds. This can be adjusted by the user. The engine gives as its best move after that time.  New Key: F3 focuses on the prompt. The prompt is focused by default and where you type the commands to the server. New Key: F4: Focus on the board panel New Key: F5: Reads the position on the board  New Key: F6: Reads the line of the engine. Additional remarks: The aim for this program is to be as user friendly as possible and that means as many tasks as possible will be or are automated or configurable."); 
+                speech.SpeakAsync("New Key: F1 brings up this menu. oaoao  New Key: F2 starts the engine. In this test version, the engine's execution time is 10 seconds. This can be adjusted by the user. The engine gives as its best move after that time.  New Key: F3 focuses on the prompt. The prompt is focused by default and where you type the commands to the server. New Key: F4: Focus on the board panel New Key: F5: Reads the position on the board  New Key: F6: Reads the line of the engine. Additional remarks: The aim for this program is to be as user friendly as possible and that means as many tasks as possible will be or are automated or configurable.");
             }
             else if (e.KeyCode == Keys.F2)
             {
@@ -1393,11 +1401,11 @@ namespace Move2VoiceBeta
                 {
                     speechQueue.EnqueueSpeech(ConvertDigitsToWords(sentence));
                 }
-                else 
+                else
                 {
                     speechQueue.EnqueueSpeech(sentence);
                 }
-                   
+
                 tbPrompt.Focus();
             }
 
@@ -1405,7 +1413,7 @@ namespace Move2VoiceBeta
             {
                 FocusEachPictureBoxSequentially();
             }
-               
+
 
 
 
@@ -1548,7 +1556,7 @@ namespace Move2VoiceBeta
                 Speech speech = new Speech((int)nudSpeachrate.Value);
                 sentence = "Please type your password and press enter";
                 speechQueue.EnqueueSpeech(sentence);
-                
+
                 tbPassword.Focus();
             }
 
@@ -1750,7 +1758,7 @@ namespace Move2VoiceBeta
 
             if (richTextBox != null) // Safety check
             {
-               // MessageBox.Show(GetCharacterAtCursor(richTextBox).ToString() + " at position " + cursorPosition);
+                // MessageBox.Show(GetCharacterAtCursor(richTextBox).ToString() + " at position " + cursorPosition);
             }
         }
 
@@ -1758,7 +1766,7 @@ namespace Move2VoiceBeta
         {
             if (richTextBox2 != null) // Safety check
             {
-               // MessageBox.Show(GetCharacterAtCursor(richTextBox2).ToString() + " at position " + cursorPosition);
+                // MessageBox.Show(GetCharacterAtCursor(richTextBox2).ToString() + " at position " + cursorPosition);
             }
         }
 
@@ -1794,8 +1802,8 @@ namespace Move2VoiceBeta
             dataGridView1.CellClick += new DataGridViewCellEventHandler(dataGridView1_CellClick);
             // Set its properties
             //dataGridView1.Dock = DockStyle.Right; // to dock it to the right
-           // dataGridView1.Width = (int)(this.Width * 2.0 / 3.0); // to make it cover 2/3 of the form's width
-           
+            // dataGridView1.Width = (int)(this.Width * 2.0 / 3.0); // to make it cover 2/3 of the form's width
+
             dataGridView1.ForeColor = Color.Black;
             dataGridView1.DefaultCellStyle.Font = new Font("Consolas", 12, FontStyle.Regular);
 
@@ -1847,7 +1855,7 @@ namespace Move2VoiceBeta
 
             // Add the DataGridView to the form's controls
             this.Controls.Add(dataGridView1);
-           
+
             dataGridView1.Dock = DockStyle.Top;
             dataGridView1.Refresh();
             dataGridView1.BringToFront();
@@ -1858,7 +1866,7 @@ namespace Move2VoiceBeta
             this.Controls.Add(closeButton);
 
         }
-        
+
 
         private DataGridView dataGridView1;
         // Then, define the event handler method
@@ -1874,10 +1882,10 @@ namespace Move2VoiceBeta
             if (this.Controls.Contains(dataGridView1))
             {
                 this.Controls.Remove(dataGridView1);
-                
+
 
             }
-           
+
         }
 
         private void rtbLog_TextChanged(object sender, EventArgs e)
@@ -1927,9 +1935,9 @@ namespace Move2VoiceBeta
 
         private void btnShowDebugPanel_Click(object sender, EventArgs e)
         {
-            if (pnlDebug.Visible) 
+            if (pnlDebug.Visible)
             {
-                pnlDebug.Visible = false;       
+                pnlDebug.Visible = false;
             }
             else
             {
@@ -1947,7 +1955,7 @@ namespace Move2VoiceBeta
             {
                 pnlTellsAndMoves.Visible = true;
             }
-            
+
         }
 
         private void cbReverseBoard_Click(object sender, EventArgs e)
@@ -1956,7 +1964,7 @@ namespace Move2VoiceBeta
             {
                 UpdateBoard(board);
             }
-            else 
+            else
             {
                 UpdateReversedBoard(board);
             }
@@ -1966,6 +1974,20 @@ namespace Move2VoiceBeta
         {
             rtbEngineOutPut.SelectionStart = rtbEngineOutPut.Text.Length;
             rtbEngineOutPut.ScrollToCaret();
+        }
+
+        private void CheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = (CheckBox)sender;
+
+            if (cb.Checked)
+            {
+                speechQueue.UnmuteSpeech();
+            }
+            else
+            {
+                speechQueue.MuteSpeech();
+            }
         }
     }
 }
