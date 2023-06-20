@@ -183,6 +183,12 @@ namespace Move2VoiceBeta
         private void tbPrompt_KeyDown(object sender, KeyEventArgs e)
         {
             Speech speech = new Speech((int)nudSpeachrate.Value);
+
+            if (!checkBox1.Checked)
+            {
+                speech.Mute();
+            }
+            
             if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
             {
                 char keyChar = (char)('0' + (e.KeyCode - Keys.D0));
